@@ -79,6 +79,22 @@ namespace BancoChu.Services.Services
             return conta != null ? conta : new Contas();
         }
 
+        public Contas GetContasByEmail(string email)
+        {
+            var listContas = GetContas();
+            var conta = listContas.Where(x => x.Email == email).FirstOrDefault();
+
+            return conta != null ? conta : new Contas();
+        }
+
+        public Contas GetContasByContaAgencia(int idConta, int agencia)
+        {
+            var listContas = GetContas();
+            var conta = listContas.Where(x => x.Conta == idConta && x.Agencia == agencia).FirstOrDefault();
+
+            return conta != null ? conta : new Contas();
+        }
+
         private Contas ConvertDtoToEntidade(ContaDto contaDto)
         {            
             Contas novaConta = new Contas();

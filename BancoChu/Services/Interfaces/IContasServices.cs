@@ -7,8 +7,10 @@ namespace BancoChu.Services.Interfaces
     {
         public bool CreateConta(ContaDto conta);
         public bool UpdateConta(ContaDto conta);
-        public bool DeleteConta(string CfpCnpj);
+        public bool DeleteConta(string cfpCnpj);
         public List<Contas> GetContas();
-        public Contas GetContasByCpfCNPJ(string CpfCnpj);
+        public Contas GetContasByCpfCNPJ(string cpfCnpj);
+        public Contas GetContasByEmail(string email);
+        public Contas GetContasByContaAgencia(int idConta, int agencia);
     }
 }

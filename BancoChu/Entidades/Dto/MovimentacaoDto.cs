@@ -1,12 +1,10 @@
 ﻿using BancoChu.Entidades.Enums;
 
-namespace BancoChu.Entidades
+namespace BancoChu.Entidades.Dto
 {
-    public class Movimentacao
+    public class MovimentacaoDto
     {
-        public int Id {  get; set; }
-        public int IdConta { get; set; }
-        public int Agencia { get; set; }
+        public string CpfCnpj { get; set; }
         public string? Descricao { get; set; }
         public decimal Valor { get; set; }
         public int? IdContaDestino { get; set; }
@@ -14,6 +12,5 @@ namespace BancoChu.Entidades
         public string? ChavePix { get; set; }
 
         public TipoMovimentacaoEnum Tipo { get; set; }
-        public DateTime DataMovimentacao { get; set; }
     }
 }

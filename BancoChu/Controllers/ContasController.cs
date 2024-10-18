@@ -80,5 +80,36 @@ namespace BancoChu.Controllers
         {
             return _contasServices.GetContasByCpfCNPJ(CpfCnpj);
         }
+
+        /*Função específica para realizar testes das implementações*/
+        [HttpPost("CreateContaPadrao")]
+        public void CreateContaPadrao()
+        {
+            ContaDto novaConta = new ContaDto();
+            novaConta.CpfCnpj = "1";
+            novaConta.Nome = "Moisés";
+            novaConta.Email = "moises.pabst@gmail.com";
+            novaConta.Saldo = 200.52M;
+
+            _contasServices.CreateConta(novaConta);
+
+            ContaDto novaConta2 = new ContaDto();
+            novaConta2.CpfCnpj = "2";
+            novaConta2.Nome = "Moisés2";
+            novaConta2.Email = "moisespabst@gmail.com";
+            novaConta2.Saldo = 250.52M;
+
+            _contasServices.CreateConta(novaConta2);
+
+            ContaDto novaConta3 = new ContaDto();
+            novaConta3.CpfCnpj = "3";
+            novaConta3.Nome = "Moisés3";
+            novaConta3.Email = "moises.pabst.mp@gmail.com";
+            novaConta3.Saldo = 415M;
+
+            _contasServices.CreateConta(novaConta3);
+
+
+        }
     }
 }
