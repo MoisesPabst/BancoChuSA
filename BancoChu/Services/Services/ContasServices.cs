@@ -1,5 +1,6 @@
 ﻿using BancoChu.Entidades;
 using BancoChu.Entidades.Dto;
+using BancoChu.Entidades.Enums;
 using BancoChu.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -66,6 +67,40 @@ namespace BancoChu.Services.Services
             return success;
         }
 
+        public void MovimentaSaldo(Movimentacao movimentacao)
+        {
+            var listContas = GetContas();
+
+            var contaOrigem = listContas.Find(x => x.Conta == movimentacao.IdConta && x.Agencia == movimentacao.Agencia);
+            if (contaOrigem != null)
+            {
+                if(movimentacao.Tipo == TipoMovimentacaoEnum.Saida)
+                {
+                    contaOrigem.Saldo = contaOrigem.Saldo - movimentacao.Valor;
+                }                    
+                else
+                {
+                    contaOrigem.Saldo = contaOrigem.Saldo + movimentacao.Valor;
+                }
+            }
+
+            var contaDestino = listContas.Find(x => x.Conta == movimentacao.IdContaDestino && x.Agencia == movimentacao.AgenciaDestino);
+            if (contaDestino != null)
+            {
+                if (movimentacao.Tipo == TipoMovimentacaoEnum.Saida)
+                {
+                    contaDestino.Saldo = contaDestino.Saldo + movimentacao.Valor;
+                }
+                else
+                {
+                    contaDestino.Saldo = contaDestino.Saldo - movimentacao.Valor;
+                }
+            }
+
+            _cache.Set("Contas", listContas);
+
+        }
+
         public List<Contas> GetContas()
         {
             return _cache.Get("Contas") == null ? new List<Contas>() : (List<Contas>)_cache.Get("Contas");
@@ -73,25 +108,19 @@ namespace BancoChu.Services.Services
 
         public Contas GetContasByCpfCNPJ(string CpfCnpj)
         {
-            var listContas = GetContas();
-            var conta = listContas.Where(x => x.CpfCnpj == CpfCnpj).FirstOrDefault();
-
+            var conta = GetContas().Where(x => x.CpfCnpj == CpfCnpj).FirstOrDefault();
             return conta != null ? conta : new Contas();
         }
 
         public Contas GetContasByEmail(string email)
         {
-            var listContas = GetContas();
-            var conta = listContas.Where(x => x.Email == email).FirstOrDefault();
-
+            var conta = GetContas().Where(x => x.Email == email).FirstOrDefault();
             return conta != null ? conta : new Contas();
         }
 
         public Contas GetContasByContaAgencia(int idConta, int agencia)
         {
-            var listContas = GetContas();
-            var conta = listContas.Where(x => x.Conta == idConta && x.Agencia == agencia).FirstOrDefault();
-
+            var conta = GetContas().Where(x => x.Conta == idConta && x.Agencia == agencia).FirstOrDefault();
             return conta != null ? conta : new Contas();
         }
 

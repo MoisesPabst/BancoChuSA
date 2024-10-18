@@ -22,9 +22,9 @@ namespace BancoChu.Services.Services
         {
             var feriados = new List<Feriados>();
             var conta = _contasServices.GetContasByCpfCNPJ(movimento.CpfCnpj);
-            var destino = GetDestino(movimento);            
+            var destino = GetDestino(movimento);
 
-            if(destino == new Contas())
+            if (conta == destino)
                 return false;
 
             var ListMovimentacao = GetMovimentacao();
@@ -48,12 +48,14 @@ namespace BancoChu.Services.Services
                 Agencia = conta.Agencia,
                 Descricao = movimento.Descricao,
                 Valor = movimento.Valor,
-                IdContaDestino = destino.Conta,
-                AgenciaDestino = destino.Agencia,
+                IdContaDestino = destino != new Contas() ? destino.Conta : null,
+                AgenciaDestino = destino != new Contas() ? destino.Agencia : null,
                 ChavePix = movimento.ChavePix,
                 Tipo = movimento.Tipo,
                 DataMovimentacao = dataMovimentocao
             };
+
+            _contasServices.MovimentaSaldo(movimentacao);
 
             ListMovimentacao.Add(movimentacao);
             _cache.Set("Movimentacao", ListMovimentacao);
@@ -64,6 +66,11 @@ namespace BancoChu.Services.Services
         public List<Movimentacao> GetMovimentacao()
         {
             return _cache.Get("Movimentacao") == null ? new List<Movimentacao>() : (List<Movimentacao>)_cache.Get("Movimentacao");
+        }
+
+        public List<Movimentacao> GetMovimentacaoByAgenciaConta(int conta, int agencia)
+        {
+            return GetMovimentacao().Where(x => x.IdConta == conta && x.Agencia == agencia).ToList();
         }
 
         private DateTime GetDataOperacao(List<Feriados> feriados)
@@ -89,7 +96,6 @@ namespace BancoChu.Services.Services
             var feriados = new List<Feriados>();
             string url = "https://brasilapi.com.br/api/feriados/v1/" + DateTime.Now.Year;
 
-            // Realizar a requisição GET
             HttpResponseMessage resposta = await client.GetAsync(url);
             if (resposta.IsSuccessStatusCode)
             {
