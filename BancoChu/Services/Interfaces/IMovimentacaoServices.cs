@@ -7,6 +7,6 @@ namespace BancoChu.Services.Interfaces
     {
         public bool MovimentarConta(MovimentacaoDto movimentacao);
         public List<Movimentacao> GetMovimentacao();
-        List<Movimentacao> GetMovimentacaoByAgenciaConta(int conta, int agencia);
+        public List<Movimentacao> GetMovimentacaoByAgenciaConta(int conta, int agencia);
     }
 }

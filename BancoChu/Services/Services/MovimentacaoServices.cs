@@ -85,7 +85,7 @@ namespace BancoChu.Services.Services
 
             do
             {
-                dataMovimentacao.AddDays(1);
+                dataMovimentacao = dataMovimentacao.AddDays(1);
             } while (datasFeriados.Contains(dataMovimentacao) || dataMovimentacao.DayOfWeek == DayOfWeek.Sunday || dataMovimentacao.DayOfWeek == DayOfWeek.Saturday);
             
             return dataMovimentacao;
@@ -99,8 +99,12 @@ namespace BancoChu.Services.Services
             HttpResponseMessage resposta = await client.GetAsync(url);
             if (resposta.IsSuccessStatusCode)
             {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
                 string conteudoResposta = await resposta.Content.ReadAsStringAsync();
-                feriados = JsonSerializer.Deserialize<List<Feriados>>(conteudoResposta);
+                feriados = JsonSerializer.Deserialize<List<Feriados>>(conteudoResposta, options);
             }            
 
             return feriados;
