@@ -52,7 +52,7 @@ namespace BancoChuSATeste
                 Descricao = "1235",
                 Tipo = TipoMovimentacaoEnum.Saida,
                 Valor = 80,
-                DataMovimentacao = DateTime.Now.Date
+                DataMovimentacao = DateTime.Now.Date.AddMonths(-1)
             };
 
             listMovimentacao.Add(movi1);
@@ -76,18 +76,9 @@ namespace BancoChuSATeste
                 Tipo = "Entrada",
                 DataMovimentacao = DateTime.Now.Date
             };
-            ExtratoDetalhes detalhe3 = new ExtratoDetalhes()
-            {
-                Descricao = "1235",
-                Valor = -80,
-                Tipo = "Saida",
-                DataMovimentacao = DateTime.Now.Date
-            };
 
             detalhes.Add(detalhe1);
             detalhes.Add(detalhe2);
-            detalhes.Add(detalhe3);
-
 
             var extrato = new ExtratoDto()
             {
@@ -100,7 +91,7 @@ namespace BancoChuSATeste
             };
 
             var servicoExtrato = new ExtratoServices(_cache, mockMovimentacao.Object, mockContas.Object);
-            var retornoExtrato = servicoExtrato.GetExtratoByCpfCnpj("1");
+            var retornoExtrato = servicoExtrato.GetExtratoByCpfCnpjPeriodo("1", DateTime.Now.Month+"/"+DateTime.Now.Year);
 
             Assert.That(extrato.Detalhes.Count, Is.EqualTo(retornoExtrato.Detalhes.Count));
             Assert.That(extrato.CpfCnpj, Is.EqualTo(retornoExtrato.CpfCnpj));

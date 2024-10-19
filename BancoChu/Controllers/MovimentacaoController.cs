@@ -2,13 +2,13 @@
 using BancoChu.Entidades.Dto;
 using BancoChu.Entidades.Enums;
 using BancoChu.Services.Interfaces;
-using BancoChu.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace BancoChu.Controllers
 {
-    public class MovimentacaoController : Controller
+    [Route("[controller]")]
+    public class MovimentacaoController : ControllerBase
     {
         private readonly ILogger<MovimentacaoController> _logger;
         private readonly IMemoryCache _cache;
@@ -24,19 +24,29 @@ namespace BancoChu.Controllers
             _movimentacaoServices = movimentacaoServices;
         }
 
-        [HttpPost("MovimentarConta")]
-        public IActionResult MovimentarConta(MovimentacaoDto movimento)
+        [HttpPost("MovimentaConta")]
+        public IActionResult MovimentaConta(MovimentacaoDto movimento)
         {
-            var success = _movimentacaoServices.MovimentarConta(movimento);
+            var movimentacaoValidator = new MovimentacaoDtoValidator();
+            var result = movimentacaoValidator.Validate(movimento);
 
-            if (success)
+            if (result.IsValid)
             {
-                return Ok($"Movimentação realizada com sucesso");
+                var success = _movimentacaoServices.MovimentarConta(movimento);
+
+                if (success)
+                {
+                    return Ok($"Movimentação realizada com sucesso");
+                }
+                else
+                {
+                    return BadRequest($"Não foi possível realizar a transação");
+                }
             }
-            else
-            {
-                return BadRequest($"Conta origem e Destino são as mesmas");
-            }
+
+            var errorMessages = result.Errors.Select(x => x.ErrorMessage).ToList();
+            return BadRequest(errorMessages);
+
         }
 
         [HttpGet("GetMovimentacoes")]

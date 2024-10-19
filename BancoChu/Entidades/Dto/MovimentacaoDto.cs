@@ -1,4 +1,5 @@
 ﻿using BancoChu.Entidades.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace BancoChu.Entidades.Dto
 {

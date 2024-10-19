@@ -1,11 +1,11 @@
-﻿using BancoChu.Entidades.Dto;
-using BancoChu.Entidades;
-using BancoChu.Services.Interfaces;
+﻿using BancoChu.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using System.ComponentModel.DataAnnotations;
 
 namespace BancoChu.Controllers
 {
+    [Route("[controller]")]
     public class ExtratoController : Controller
     {
         private readonly ILogger<ExtratoController> _logger;
@@ -23,9 +23,10 @@ namespace BancoChu.Controllers
         }
 
         [HttpGet("GetExtratoByCpfCnpj")]
-        public ExtratoDto GetMovimentacoes(string cpfCnpj)
+        public IActionResult GetExtratBrPeriodo([Required] string cpfCnpj, [Required] string periodo)
         {
-            return _extratoServices.GetExtratoByCpfCnpj(cpfCnpj);
+            var extrato = _extratoServices.GetExtratoByCpfCnpjPeriodo(cpfCnpj, periodo);
+            return Ok(extrato);
         }
     }
 }

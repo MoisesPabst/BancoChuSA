@@ -4,6 +4,6 @@ namespace BancoChu.Services.Interfaces
 {
     public interface IExtratoServices
     {
-        public ExtratoDto GetExtratoByCpfCnpj(string cpfCnpj);
+        public ExtratoDto GetExtratoByCpfCnpjPeriodo(string cpfCnpj, string periodo);
     }
 }

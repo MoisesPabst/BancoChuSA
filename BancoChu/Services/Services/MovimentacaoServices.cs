@@ -24,7 +24,7 @@ namespace BancoChu.Services.Services
             var conta = _contasServices.GetContasByCpfCNPJ(movimento.CpfCnpj);
             var destino = GetDestino(movimento);
 
-            if (conta == destino)
+            if (conta == destino || conta.Conta == 0)
                 return false;
 
             var ListMovimentacao = GetMovimentacao();

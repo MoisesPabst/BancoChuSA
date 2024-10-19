@@ -1,5 +1,7 @@
+using BancoChu.Entidades.Dto;
 using BancoChu.Services.Interfaces;
 using BancoChu.Services.Services;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,7 @@ builder.Services.AddScoped<IMovimentacaoServices, MovimentacaoServices>();
 builder.Services.AddScoped<IExtratoServices, ExtratoServices>();
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
