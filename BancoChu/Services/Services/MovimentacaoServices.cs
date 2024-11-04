@@ -70,7 +70,7 @@ namespace BancoChu.Services.Services
 
         public List<Movimentacao> GetMovimentacaoByAgenciaConta(int conta, int agencia)
         {
-            return GetMovimentacao().Where(x => x.IdConta == conta && x.Agencia == agencia).ToList();
+            return GetMovimentacao().Where(x => (x.IdConta == conta && x.Agencia == agencia) || (x.IdContaDestino == conta && x.AgenciaDestino == agencia)).ToList();
         }
 
         private DateTime GetDataOperacao(List<Feriados> feriados)
